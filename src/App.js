@@ -37,13 +37,10 @@ function App() {
 
   const onConfirm = () => {
     let command;
-    switch (os.platform()) {
-      case "Windows_NT":
-        command = `shutdown -s -t ${moment(time).diff(new Date(), "s")}`;
-        break;
-      default:
-        command = `sudo shutdown -h ${moment(time).format("HH:mm")}`;
-        break;
+    if (os.platform() === 'win32' || os.platform() === 'Windows_NT'){
+      command = `shutdown -s -t ${moment(time).diff(new Date(), "s")}`;
+    } else {
+      command = `sudo shutdown -h ${moment(time).format("HH:mm")}`;
     }
     exec(command, (error, stdout, stderr) => {
       if (error || stderr) {
@@ -68,13 +65,10 @@ function App() {
 
   const onConfirmCancel = () => {
     let command;
-    switch (os.platform()) {
-      case "Windows_NT":
-        command = `shutdown /a`;
-        break;
-      default:
-        command = "sudo killall shutdown";
-        break;
+    if (os.platform() === 'win32' || os.platform() === 'Windows_NT'){
+      command = `shutdown -a`;
+    } else {
+      command = "sudo killall shutdown";
     }
     exec(command, (error, stdout, stderr) => {
       console.log(error);
