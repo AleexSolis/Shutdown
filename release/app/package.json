@@ -1,0 +1,17 @@
+{
+  "name": "shutdown",
+  "author": {
+    "email": "aleexsolis@hotmail.com",
+    "name": "Alex Solis"
+  },
+  "productName": "ShutdownApp",
+  "description": "This app allows you to schedule an automatic shutdown on your computer.",
+  "version": "1.0.1",
+  "main": "./dist/main/main.js",
+  "scripts": {
+    "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
+    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
+    "postinstall": "npm run electron-rebuild && npm run link-modules"
+  },
+  "license": "MIT"
+}
