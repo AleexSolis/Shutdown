@@ -32,18 +32,30 @@ function App() {
   const onConfirm = () => {
     let command;
     if (os.platform() === 'win32' || os.platform() === 'Windows_NT') {
-      command = `shutdown -s -t ${moment(time).diff(new Date(), "s")}`;
+      command = `shutdown -s -t ${moment(time).diff(new Date(), 's')}`;
     } else {
-      command = `sudo shutdown -h ${moment(time).format("HH:mm")}`;
+      command = `sudo shutdown -h ${moment(time).format('HH:mm')}`;
     }
-    exec(command, (error:any) => {
+    exec(command, (error: any) => {
       if (error) {
-        setAlert({
-          severity: "error",
-          description:
-            "Error when trying to program the shutdown of your computer.",
-        });
-        setAlertInfo(false);
+        console.log(error?.cmd);
+        
+        if (error?.cmd.includes('shutdown')) {
+          setAlert({
+            severity: 'warning',
+            description: `The previous shutdown was replaced.Your computer will be shutdown at ${moment(time).format(
+              'LT'
+            )}.`,
+          });
+          setAlertInfo(true);
+        } else {
+          setAlert({
+            severity: 'error',
+            description:
+              'Error when trying to program the shutdown of your computer.',
+          });
+          setAlertInfo(false);
+        }
       }
     });
     setAlert({
@@ -62,14 +74,15 @@ function App() {
     if (os.platform() === 'win32' || os.platform() === 'Windows_NT') {
       command = `shutdown -a`;
     } else {
-      command = "sudo killall shutdown";
+      command = 'sudo killall shutdown';
     }
-    exec(command, (error:any) => {
+    exec(command, (error: any) => {
       if (error) {
         setAlert({
-          severity: "error",
-          title: "Error",
-          description: "Error when trying to program the shutdown of your computer.",
+          severity: 'error',
+          title: 'Error',
+          description:
+            'Error when trying to program the shutdown of your computer.',
         });
       }
 
